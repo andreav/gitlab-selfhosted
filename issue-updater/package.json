@@ -1,0 +1,25 @@
+{
+  "name": "issue-updater",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "start": "JUNIT_FILE_PATH='./tests/test-results-example-3.xml' GITLAB_TOKEN='123' ts-node ./src/index.ts",
+    "test": "mocha -r ts-node/register ./tests/**/*.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.14",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.4.1",
+    "mocha": "^10.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "junit2json": "^3.1.6"
+  }
+}
