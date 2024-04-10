@@ -54,6 +54,19 @@ test:unit:
    dependencies:
       - install
    coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+   artifacts:
+      paths:
+         - test-results.xml
+      reports:
+         junit: test-results.xml
+test:update-issues:
+   stage: quality
+   image: node
+   script:
+      -  echo $CI_JOB_TOKEN
+      -  cat ./test-results.xml
+   dependencies:
+      - test:unit
 stages:
     - install
     - build
