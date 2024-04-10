@@ -1,4 +1,4 @@
-# gitlb example
+# gitlab example
 
 ## setup
 
@@ -6,10 +6,11 @@
 
     docker compose up -d
 
-    # per connettersi alla macchina
-    docker exec -it gitlab /bin/bash
-    .. edit ..
-    docker restart gitlab
+    # For connecting to gitlab
+    docker compose exec gitlab bash
+    
+    # For connecting to runner
+    docker compose exec gitlab-runner bash
 
 
 ## login
@@ -19,59 +20,72 @@
 Visit: URL: http://your-server-ip:8080
 
     user: root
-    pwd: quella presa prima (es: boCoQgIkmw4k4YA47pjtU2tCpp068qWEf4WnKjZJLhw=)
+    pwd: result of previous grep (es: boCoQgIkmw4k4YA47pjtU2tCpp068qWEf4WnKjZJLhw=)
 
 
-# Crea un gruppo ed un repo
+# Creating a project
 
-Da UI crea un gruppo etstgroup ed un progetto testproject
+From UI create a group: testgroup and a project: testproject
 
-Pusha un repo, ad es uno come quello nella cartella testproject
+Push testproject folder contained in this repo to just created testproject
 
-# Crea un runner
+## External_url:
 
-Da UI: Settings -> CICD -> Runners
+In order for the runner to clone the repositories during pipeline exection from the right url, you should adjust the external URL. 
 
-Ti da un comando, lo esegui nel conatiner gitlab-runner:
+CHage gitlab config:
+
+    docker compose exec gitlab bash
+    vi /etc/gitlab/gitlab.rb
+    external_url = "http://gitlab"
+
+Then reconfigure gitlab (always from inside the container):
+
+    gitlab-ctl reconfigure
+    gitlab-ctl restart
+
+In order for the runner to see the external_url, it must be on the docker network.   
+Configuring the runner for beeing on the docker network:
+
+* When creating the runner adding this command line option:
+
+        --docker-network-mode gitlab-network
+
+* Directly editing config file `/etc/gitlab-runner/config.toml`:
+
+        [[runners]]
+        ...
+        [runners.docker]
+            ...
+            network_mode = "gitlab-network"
+
+Note: `gitlab-network` is the network name from docker-compose.yml
+
+# Creating a runner
+
+From UI: Settings -> CICD -> Runners
+
+You get a command but above all a token. Connect to gitlab-runner:
 
     docker compose exec gitlab-runner bash
 
-Poi, il token te lo stampa la UI  
+Execute the command:  
 
 Nota che ho messo shell come tipo di executor
 
-    ae57b9b87df4:/# gitlab-runner register --url http://gitlab  --token <TOKEN_QUI>
-    Runtime platform                arch=amd64 os=linux pid=46 revision=81ab07f6 version=16.10.0
-    Running in system-mode.                            
-                                                    
-    Enter the GitLab instance URL (for example, https://gitlab.com/):
-    [http://gitlab]: 
-    Verifying runner... is valid                        runner=cze_n9kPu
-    Enter a name for the runner. This is stored only in the local config.toml file:
-    [ae57b9b87df4]: un-runner
-    Enter an executor: instance, ssh, parallels, docker+machine, docker-autoscaler, docker-windows, kubernetes, custom, shell, virtualbox, docker:
-    shell 
-    Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
-
-    Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
-
-Se tutto va bene, ti compare un runner nella lista sotto Settings -> CICD -> Runners
-
-E la prima pipeline dopo la push dovrebbe girare, e nel container del runner vedi anche un clone sotto la home: /home/gitlab-runner/builds/cze_n9kPu/0/testgroup/testproject/
-
-Crea anche un altro runner, sempre linux, ma con un executor docker.  
-Questo serve per eseguire i docker-in-docker (si può fare anche con lo shell, ma visto che sto lanciando l runner in un docker non so..)
-
     gitlab-runner register -n \
     --url "http://gitlab/" \
-    --registration-token <TOKEN_FORNITO_DA_UI> \
+    --registration-token <TOKEN_OBTAINED_FROM_UI> \
     --executor docker \
     --description "docker-runner" \
     --docker-image "docker:24.0.5" \
     --docker-privileged \
     --docker-volumes "/certs/client"
+    --docker-network-mode gitlab-network
 
-Questo scrive nel toml una sezione tipo questa:
+You should see the new runner under: `Settings -> CICD -> Runners`
+
+If you inspect `/etc/gitlab-runner/config.toml` from inside the runner, you get:
 
     [[runners]]
     name = "docker-runner"
@@ -93,35 +107,5 @@ Questo scrive nel toml una sezione tipo questa:
         volumes = ["/certs/client", "/cache"]
         shm_size = 0
         network_mtu = 0
-
-
-## Se il runner cerca di clonare URL esoterici:
-
-Cambia nella config di gitlab il suo url esterno:
-
-    docker compose exec gitlab bash
-    vi /etc/gitlab/gitlab.rb
-    external_url = "http://gitlab"
-
-Poi
-
-    gitlab-ctl reconfigure
-    gitlab-ctl restart
-
-Cosi il runner lo cerca a gitlab ed essendo nella rete docker, lo trova
-
-Ma per trovarlo, il runner deve stare sulla stessa rete degli altri, quindi nella sua config glielo dici:
-
-O lo fai quando crei il runner:
-
-    --docker-network-mode gitlab-network
-
-O lo fai dal toml:
-
-    [[runners]]
-    ...
-    [runners.docker]
-        ...
         network_mode = "gitlab-network"
 
-Nota, la rete è quella del docker-compose.yml
