@@ -23,6 +23,12 @@ variables:
   # This instructs Docker not to start over TLS.
   DOCKER_TLS_CERTDIR: ""
 
+stages:
+    - install
+    - build
+    - quality
+    - update-issues-status
+
 install:
    stage: install
    image: node
@@ -59,16 +65,12 @@ test:unit:
          - test-results.xml
       reports:
          junit: test-results.xml
-test:update-issues:
-   stage: quality
+update-issues-status:
+   stage: update-issues-status
    image: node
    script:
       -  echo $CI_JOB_TOKEN
       -  cat ./test-results.xml
    dependencies:
       - test:unit
-stages:
-    - install
-    - build
-    - quality
 
