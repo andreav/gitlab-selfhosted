@@ -1,0 +1,23 @@
+{
+  "name": "testproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register ./tests/**/*.ts",
+    "build": "tsc"
+ },
+"keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.14",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.4.1",
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2"
+  }
+}
