@@ -1,4 +1,4 @@
-import { Gitlab, Projects } from '@gitbeaker/node';
+import { Gitlab, Projects } from '@gitbeaker/rest';
 
 if (!process.env.CI_JOB_TOKEN) {
     throw new Error("Environment variable CI_JOB_TOKEN not set");

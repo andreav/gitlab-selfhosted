@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@gitbeaker/rest": "^40.0.2"
+  }
+}

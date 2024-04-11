@@ -6,6 +6,7 @@
     "configurations": [
         {
             "type": "node",
+            "runtimeVersion": "20.12.2",
             "request": "launch",
             "name": "Mocha Current File",
             "cwd": "${workspaceFolder}/issue-updater",
