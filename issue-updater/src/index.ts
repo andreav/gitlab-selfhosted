@@ -33,7 +33,7 @@ const main = async () => {
             const [proj_id, issue_id] = extractIssueUrl(tcName, project_and_issue_regexp)
             if (proj_id && issue_id) {
                 const isPassed = !isFailed && !isSkipped
-                updateIssue(proj_id, issue_id, isPassed, isFailed, isSkipped)
+                updateIssue(proj_id, parseInt(issue_id), isPassed, isFailed, isSkipped)
             }
         })
     })

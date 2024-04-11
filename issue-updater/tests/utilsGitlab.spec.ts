@@ -18,7 +18,10 @@ describe("Gitlab Utils", () => {
         const isOnMain = isMainBranch("main", "other", undefined)
         assert.equal(isOnMain, false);
     });
-    it("updateIssue", () => {
-        updateIssue("testproject", "1", true, false, false)
+    it("updateIssue - project name", () => {
+        updateIssue("testgroup/testproject", 1, true, false, false)
+    });
+    it("updateIssue - project id", () => {
+        updateIssue("1", 1, true, false, false)
     });
 });
