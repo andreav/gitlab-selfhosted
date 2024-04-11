@@ -9,7 +9,7 @@ It implements some ideas provided in [this Gitlab video](https://www.youtube.com
 A TestCase is tagged downstream of test execution in a pipeline as:
 
 - master:passed or master:failed
-- staging:passed or staging:failed
+- staging:passed or staging:failed  
 Depending on the test execution status and the branch it is executed from.
 
 ## Repository structure
@@ -26,22 +26,13 @@ Allows you to launch a gitlab stack composed of web-application and runner with 
 
 ### issue-updater folder
 
-Provides the source code to build a node-based docker image with the code necessary to update the issues/test cases based on the result of the test executions
+This project provides the source code to build a node-based docker image usable inside a gitlab pipeline to update issues labels based on the result of the test executions contained in a junit report
 
-The node scrip is fed via a [Junit report](https://docs.gitlab.com/ee/ci/testing/unit_test_reports.html) that it must receive as an artifact from the pipeline.  
+The node script can be run with `npm run start` and is fed via a [Junit report](https://docs.gitlab.com/ee/ci/testing/unit_test_reports.html) that it must receive as an artifact from the pipeline.  
 This file is the same file used to see the results of a test execution within Gitlab
 
-The node script finds the Gitlab issue to be updated by looking for the project and issue id within any test case name.  
+The node script extract the project id/code and the issue id from test case name.  
 To achieve this, it uses a regular expression that can be customized via an environment variable
-
-The node script inside this container receives some data from the pipeline and updates issue tests:
-
-- environment variable: JUNIT_FILE_PATH  
-  Pointing to the tests artifact containing the Junit tests report
-- environment variable: GITLAB_TOKEN  
-  Containing the Gitlab token provided by the pipeline for interacting with Gitlab APIs
-- environment variable (optional): PROJ_ISSUE_REGEXP  
-  This regular expression allows the script to uniquely identify the issue that needs to be updated
   
 The container produced by this folder is hosted on docker hub [here](https://hub.docker.com/repository/docker/andreav/gitlab-issue-updater)
 

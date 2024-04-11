@@ -21,4 +21,4 @@ COPY --from=build /usr/src/app/dist ./dist
 
 RUN npm install --only=prod
 
-CMD ["npm", "run", "start"]
+CMD ["sh"]

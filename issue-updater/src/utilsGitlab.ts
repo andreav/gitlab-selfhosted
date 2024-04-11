@@ -10,7 +10,7 @@ if (!process.env.CI_SERVER_URL) {
 if (!process.env.CI_DEFAULT_BRANCH) {
     throw new Error(`Environment variable CI_DEFAULT_BRANCH not set`);
 }
-if (!process.env.CI_COMMIT_BRANCH && !process.env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME) {
+if (!process.env.CI_DEFAULT_BRANCH && !process.env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME) {
     throw new Error(`Environment variable CI_COMMIT_BRANCH or CI_MERGE_REQUEST_SOURCE_BRANCH_NAME`);
 }
 
