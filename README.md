@@ -42,9 +42,11 @@ This project is a sample project for quick testing
 
 ## Usage: from zero to hero
 
-- Run gitlab and runner
+Steps to see issues automatically updated according to test results are:
+
+- Run gitlab, create a project and register one docker runner
 - Create Test Cases and implement them in a test project
-- Run a pipeline and see Issues updating their status
+- Run a pipeline and see Issues updating their status according to test results
 
 ### Run gitlab, create a project and register one docker runner
 
@@ -102,7 +104,7 @@ Congratulation! You have now a running Gitlab instance with a docker runner read
 
   Feel free to add more issues and test cases and experiment linking or not linking them
 
-### Run a pipeline and watch issue statuses update
+### Run a pipeline and see Issues updating their status according to test results
 
 - After all your modifications to tests anf issue, commit and push `testproject`  
   
