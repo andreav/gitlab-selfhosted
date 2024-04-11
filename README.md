@@ -4,7 +4,7 @@ This repository shows a way to manage tests within Gitlab
 
 The goal is to demonstrate how to manage Test Cases as issues in Gitlab, and automatically update their status based on results of test executions.
 
-It implement some ideas provided in [this Gitlab video](https://www.youtube.com/watch?v=FPEfR4NrG_w)
+It implements some ideas provided in [this Gitlab video](https://www.youtube.com/watch?v=FPEfR4NrG_w)
 
 A TestCase is tagged downstream of test execution in a pipeline as:
 - master:passed or master:failed
