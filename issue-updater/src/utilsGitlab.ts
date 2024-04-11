@@ -70,8 +70,14 @@ function getAllLabelsButThis(key: number[]) {
     return result;
 }
 
-export const updateIssue = async (proj_id: number | string, issue_id: number, isPassed: boolean, isFailed: boolean, isSkipped: boolean) => {
-    console.log(`Updating Project/Issue: ${proj_id}/${issue_id} - passed/failed/skipped: ${isPassed}/${isFailed}${isSkipped} - isOnMain: ${isOnMain}`);
+export const updateIssue = async (proj_id: number | string, issue_id_str: string, isPassed: boolean, isFailed: boolean, isSkipped: boolean) => {
+    console.log(`Updating Project/Issue: ${proj_id}/${issue_id_str} - passed/failed/skipped: ${isPassed}/${isFailed}${isSkipped} - isOnMain: ${isOnMain}`);
+
+    const issue_id = parseInt(issue_id_str)
+    if (isNaN(issue_id)) {
+        console.error("@@ issue id must be a number");
+        return
+    }
 
     try {
         const project = await api.Projects.show(proj_id);

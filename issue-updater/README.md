@@ -4,13 +4,13 @@ This project will update issues starting from a junit report.
 
 - it will look for project name and issue id (together they represent a unique key in gitlab for identifying an issue) inside the test name
 - the it will update every issue setting one of these four labels:
-    - staging:passed
-    - staging failed
-    - prod:passing
-    - prod:failed
+  - staging:passed
+  - staging failed
+  - prod:passing
+  - prod:failed
  according to:
-    - test status passing or failed
-    - git branch main or not 
+  - test status passing or failed
+  - git branch main or not
 
 | branch \ status   | PASSED          | FAILED         |
 | ----------------- | --------------  | -------------  |
@@ -53,4 +53,8 @@ package.json:
         "test": "mocha -r ts-node/register -r dotenv/config ./tests/**/*.ts"
     },
 
+For pushing image to DockerHub:
 
+- docker login
+- docker build -t andreav/gitlab-issue-updater:1.0 .
+- docker push andreav/gitlab-issue-updater:1.0

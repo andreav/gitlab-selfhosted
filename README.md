@@ -43,7 +43,7 @@ The node script inside this container receives some data from the pipeline and u
 - environment variable (optional): PROJ_ISSUE_REGEXP  
   This regular expression allows the script to uniquely identify the issue that needs to be updated
   
-The container produced by this folder is hosted on docker hub here (TODO:)
+The container produced by this folder is hosted on docker hub [here](https://hub.docker.com/repository/docker/andreav/gitlab-issue-updater)
 
 ### test project folder
 

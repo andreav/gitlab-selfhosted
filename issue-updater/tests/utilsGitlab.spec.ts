@@ -19,12 +19,12 @@ describe("Gitlab Utils", () => {
         assert.equal(isOnMain, false);
     });
     it("updateIssue - project name", async () => {
-        await updateIssue("testgroup/testproject", 1, true, false, false)
+        await updateIssue("testgroup/testproject", "1", true, false, false)
     });
     it("updateIssue - project id - passed", async () => {
-        await updateIssue("1", 1, true, false, false)
+        await updateIssue("1", "1", true, false, false)
     });
     it("updateIssue - project id - failed", async () => {
-        await updateIssue("1", 1, false, true, false)
+        await updateIssue("1", "1", false, true, false)
     });
 });
