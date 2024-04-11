@@ -30,6 +30,9 @@ var api = new Gitlab({
 
 const isOnMain = isMainBranch(process.env.CI_DEFAULT_BRANCH, process.env.CI_COMMIT_BRANCH, process.env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)
 
+function arrayToString(arr: number[]) {
+    return JSON.stringify(arr);
+}
 
 export const getAllLabels = () => {
     const labelScopeMain = process.env.LABEL_SCOPE_MAIN ?? "master-status"
@@ -41,16 +44,30 @@ export const getAllLabels = () => {
 
     // TODO: cache
     return new Map([
-        [[1, 0, 1, 0, 0], `${labelScopeMain}:${labelValuePassed}`],
-        [[1, 0, 0, 1, 0], `${labelScopeMain}:${labelValueFailed}`],
-        [[1, 0, 0, 0, 1], `${labelScopeMain}:${labelValueSkipped}`],
-        [[0, 1, 1, 0, 0], `${labelScopeStaging}:${labelValuePassed}`],
-        [[0, 1, 0, 1, 0], `${labelScopeStaging}:${labelValueFailed}`],
-        [[0, 1, 0, 0, 1], `${labelScopeStaging}:${labelValueSkipped}`],
+        [arrayToString([1, 0, 1, 0, 0]), `${labelScopeMain}:${labelValuePassed}`],
+        [arrayToString([1, 0, 0, 1, 0]), `${labelScopeMain}:${labelValueFailed}`],
+        [arrayToString([1, 0, 0, 0, 1]), `${labelScopeMain}:${labelValueSkipped}`],
+        [arrayToString([0, 1, 1, 0, 0]), `${labelScopeStaging}:${labelValuePassed}`],
+        [arrayToString([0, 1, 0, 1, 0]), `${labelScopeStaging}:${labelValueFailed}`],
+        [arrayToString([0, 1, 0, 0, 1]), `${labelScopeStaging}:${labelValueSkipped}`],
     ])
 }
-export const getAllButThisLabel = (excludeThisLabel: string) => {
-    return [...getAllLabels().values()].filter(t => t !== excludeThisLabel)
+
+export const getLabel = (key: number[]) => {
+    return getAllLabels().get(arrayToString(key));
+}
+
+function getAllLabelsButThis(key: number[]) {
+    const result = [];
+    const keyString = JSON.stringify(key);
+
+    for (const [k, v] of getAllLabels()) {
+        if (k !== keyString) {
+            result.push(v);
+        }
+    }
+
+    return result;
 }
 
 export const updateIssue = async (proj_id: number | string, issue_id: number, isPassed: boolean, isFailed: boolean, isSkipped: boolean) => {
@@ -72,15 +89,15 @@ export const updateIssue = async (proj_id: number | string, issue_id: number, is
         }
 
         const key = [isOnMain ? 1 : 0, isOnMain ? 0 : 1, isPassed ? 1 : 0, isFailed ? 1 : 0, isSkipped ? 1 : 0]
-        const label2Add = getAllLabels().get(key)
-        if(label2Add === undefined) {
+        const label2Add = getLabel(key)
+        if (label2Add === undefined) {
             console.error("@@ INTERNAL ERROR - label2Add not found.");
             return
         }
-        const removeLabels = getAllButThisLabel(label2Add)
+        const removeLabels = getAllLabelsButThis(key)
 
         console.log(`label2Add ${label2Add} - removeLabels ${removeLabels.join(",")}`);
-        
+
         const issueUpdated = await api.Issues.edit(project.id, issue.iid, {
             addLabels: label2Add,
             removeLabels: removeLabels.join(",")

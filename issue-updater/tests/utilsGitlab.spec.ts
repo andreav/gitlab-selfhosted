@@ -18,10 +18,13 @@ describe("Gitlab Utils", () => {
         const isOnMain = isMainBranch("main", "other", undefined)
         assert.equal(isOnMain, false);
     });
-    it("updateIssue - project name", () => {
-        updateIssue("testgroup/testproject", 1, true, false, false)
+    it("updateIssue - project name", async () => {
+        await updateIssue("testgroup/testproject", 1, true, false, false)
     });
-    it("updateIssue - project id", () => {
-        updateIssue("1", 1, true, false, false)
+    it("updateIssue - project id - passed", async () => {
+        await updateIssue("1", 1, true, false, false)
+    });
+    it("updateIssue - project id - failed", async () => {
+        await updateIssue("1", 1, false, true, false)
     });
 });

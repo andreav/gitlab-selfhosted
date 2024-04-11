@@ -21,7 +21,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@gitbeaker/node": "^35.8.1",
+    "@gitbeaker/rest": "^40.0.2",
     "junit2json": "^3.1.6"
   }
 }
