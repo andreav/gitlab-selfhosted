@@ -14,17 +14,18 @@ Depending on the test execution status and the branch it is executed from.
 
 ## Repository structure
 
-Repository is made up of 3 folders:
+Repository is made up of these folders:
 
-- gitlab
-- issue-updater
-- testproject
+- [gitlab](#folder-gitlab)
+- [issue-updater](#folder-issue-updater)
+- [testproject](#folder-test-project)
+- [importer-template](#folder-importer-template)
 
-### gitlab folder
+### Folder: gitlab
 
 Allows you to launch a gitlab stack composed of web-application and runner with a "docker compose up"
 
-### issue-updater folder
+### Folder: issue-updater
 
 This project provides the source code to build a node-based docker image usable inside a gitlab pipeline to update issues labels based on the result of the test executions contained in a junit report
 
@@ -36,9 +37,35 @@ To achieve this, it uses a regular expression that can be customized via an envi
   
 The container produced by this folder is hosted on docker hub [here](https://hub.docker.com/repository/docker/andreav/gitlab-issue-updater)
 
-### test project folder
+### Folder: test project
 
 This project is a sample project for quick testing
+
+### Folder: importer-template
+
+This folder contains an excel template for bulk importing test cases with ease.  
+It implements [this artcile](https://handbook.gitlab.com/handbook/marketing/brand-and-product-marketing/product-and-solution-marketing/getting-started/104/)  
+User can specify Issue attributes in each colum, then some Excel formula aggregate those informations into the Gitlab template.  
+This template leverages [quick actions](https://docs.gitlab.com/ee/user/project/quick_actions.html) for implementing all operations supported by filling columns.  
+
+Issue fields supported by this template:
+
+| Column Name | Usage |
+| --------- | -------- |
+| Raw Title | Test Case Title         |
+| Raw Description | Test Case Description         |
+| Scenario | Test Case Scenario (generic description)        |
+| Precondition | Test Case Precondition         |
+| Issue Type | Gitlab label for identifying `Test Case` issues, i.e: type:test        |
+| Test Type |  Gitlab label for identifying `Test Case` issues, i.e: type:manual or type::automatic        |
+| Link | relates this issue to its Requirement Issue or User Story Issue         |
+| Epic | Inserts this issue into the epic specified         |
+| Team Label |  Gitlab label for identifying a Team        |
+| Effort | Add an effort to the issue         |
+| Weight | Add a weight to the issue         |
+| Iteration | Inserts the issue into one iteration         |
+| Title |  This is the column used by Gitlab during import. It equals to 'Raw Title' column         |
+| Description | This is the column used by Gitlab during import. It is transformed by Excel formulas to embed all other columns but "Raw Title"    |
 
 ## Usage: from zero to hero
 
