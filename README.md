@@ -96,9 +96,10 @@ Congratulation! You have now a running Gitlab instance with a docker runner read
 
 - Now from the Gital UI create some issues inside the Test Project
 
-- Link these issues with tests
-  For instance, inside the cloned repository, modify the name of the test inside `tests/hello.spec.ts` from `Testing Hello Endriu` to `proj:testgroup/testproject id:1 Testing Hello Endriu`  
-  This operation will link the test just modified with the issue id number `1` in the Gitlab project `testgroup/testproject`  
+- Link these issues with tests  
+  Inside the cloned repository, look at the test file `tests/hello.spec.ts`  
+  `testproject` has a default test named `proj:testgroup/testproject id:1 Testing Hello Endriu`  
+  Naming the test this way links this test to issue number `1` in Gitlab project `testgroup/testproject`  
   The regular expression for identifying `project code` and `issue id` can be customized directly from the pipeline  
   Default value looks for a test starting with `proj:<project-code> id:<issue-id>`
 
