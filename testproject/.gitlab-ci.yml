@@ -67,7 +67,7 @@ update-issues-status:
    stage: update-issues-status
    image: andreav/gitlab-issue-updater:1.0
    variables:
-      JUNIT_FILE_PATH: "test-results.xml"
+      JUNIT_FILE_PATH: "${CI_BUILDS_DIR}/test-results.xml"
    script:
       - npm run start --prefix /usr/src/app
    dependencies:

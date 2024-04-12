@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="0.006" tests="1" failures="0">
-  <testsuite name="Root Suite" timestamp="2024-04-10T17:38:33" tests="0" time="0.000" failures="0">
+<testsuites name="Mocha Tests" time="0.005" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-04-12T20:05:16" tests="0" time="0.000" failures="0">
   </testsuite>
-  <testsuite name="Calculator Tests" timestamp="2024-04-10T17:38:33" tests="1" file="/home/andreav/docker/testproject/tests/hllo.spec.ts" time="0.003" failures="0">
-    <testcase name="Calculator Tests should return 5 when 2 is added to 3" time="0.001" classname="should return 5 when 2 is added to 3">
+  <testsuite name="Hello Tests" timestamp="2024-04-12T20:05:16" tests="1" file="/home/andreav/docker/gitlab/testproject/tests/hello.spec.ts" time="0.003" failures="0">
+    <testcase name="Hello Tests proj:testgroup/testproject id:1 Testing Hello Endriu" time="0.001" classname="proj:testgroup/testproject id:1 Testing Hello Endriu">
     </testcase>
   </testsuite>
 </testsuites>
