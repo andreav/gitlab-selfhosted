@@ -121,7 +121,7 @@ Congratulation! You have now a running Gitlab instance with a docker runner read
         git clone http://localhost:8080/testgroup/testproject.git <anywhere>/testproject
         cp -rT ./testproject <anywhere>/testproject
 
-- Now from the Gital UI create some issues inside the Test Project
+- Now from the Gitlab UI create some issues inside the Test Project
 
 - Link these issues with tests  
   Inside the cloned repository, look at the test file `tests/hello.spec.ts`  
@@ -134,7 +134,14 @@ Congratulation! You have now a running Gitlab instance with a docker runner read
 
 ### Run a pipeline and see Issues updating their status according to test results
 
-- After all your modifications to tests anf issue, commit and push `testproject`  
+- Create a token from Gitlab UI
+  - Personal Access Token
+  - Group Token
+  - Project Token
+
+- Pass that token to issue-update-stage inside .gitlab-ci.yaml with JOB_TOKEN param
+
+- Modify as you prefer tests and issue as described in the previous paragraph, then commit and push `testproject`  
   
 - This will trigger a pipeline using .gitlab-ci.yaml contained in `testproject`  
   The pipeline has 4 stages

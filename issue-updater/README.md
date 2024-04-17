@@ -26,7 +26,7 @@ The pipeline step generted by this project can be customized according to these 
 | ------------------------------------ | ------------------------------------------------  |
 | JUNIT_FILE_PATH                      | Pointing to the tests artifact containing the Junit tests report    |
 | PROJ_ISSUE_REGEXP                    | This regular expression extracts project id/code and issue id from issue name: default: `^proj:(\\w+) id:(\\d+).*` |
-| CI_JOB_TOKEN                         | The access token used for accessing Gitlab API    |
+| JOB_TOKEN                            | An Access Token used for accessing Gitlab API (CI_JOB_TOKEN not supported because of its limitations in accessing APIs)    |
 | CI_SERVER_URL                        | Gitlab Server URL    |
 | CI_DEFAULT_BRANCH                    | The access token used for accessing Gitlab API    |
 | CI_COMMIT_BRANCH                     | The access token used for accessing Gitlab API    |

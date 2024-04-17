@@ -1,7 +1,7 @@
 import { Gitlab, Projects } from '@gitbeaker/rest';
 
-if (!process.env.CI_JOB_TOKEN) {
-    throw new Error("Environment variable CI_JOB_TOKEN not set");
+if (!process.env.JOB_TOKEN) {
+    throw new Error("Environment variable JOB_TOKEN not set");
 }
 if (!process.env.CI_SERVER_URL) {
     throw new Error("Environment variable CI_SERVER_URL not set");
@@ -25,7 +25,7 @@ export const isMainBranch = (CI_DEFAULT_BRANCH: string, CI_COMMIT_BRANCH?: strin
 
 var api = new Gitlab({
     host: process.env.CI_SERVER_URL,
-    token: process.env.CI_JOB_TOKEN,
+    token: process.env.JOB_TOKEN,
 });
 
 const isOnMain = isMainBranch(process.env.CI_DEFAULT_BRANCH, process.env.CI_COMMIT_BRANCH, process.env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)

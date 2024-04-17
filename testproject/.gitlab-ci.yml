@@ -68,6 +68,17 @@ update-issues-status:
    image: andreav/gitlab-issue-updater:1.0
    variables:
       JUNIT_FILE_PATH: "${CI_PROJECT_DIR}/test-results.xml"
+      JOB_TOKEN: <mandatory>
+      # PROJ_ISSUE_REGEXP: "^proj:(\\S+) id:(\\d+).*"
+      # CI_SERVER_URL: <provided by pipeline>
+      # CI_DEFAULT_BRANCH: <provided by pipeline>
+      # CI_COMMIT_BRANCH: <provided by pipeline>
+      # CI_MERGE_REQUEST_SOURCE_BRANCH_NAME: <provided by pipeline>
+      # LABEL_SCOPE_MAIN: "master"
+      # LABEL_SCOPE_STAGING: "staging"
+      # LABEL_VALUE_PASSED: "passed"
+      # LABEL_VALUE_FAILED: "failed"
+      # LABEL_VALUE_SKIPPED: "skipped"
    script:
       - npm run start --prefix /usr/src/app
    dependencies:
