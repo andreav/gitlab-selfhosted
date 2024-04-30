@@ -14,6 +14,13 @@ if (!process.env.CI_DEFAULT_BRANCH && !process.env.CI_MERGE_REQUEST_SOURCE_BRANC
     throw new Error(`Environment variable CI_COMMIT_BRANCH or CI_MERGE_REQUEST_SOURCE_BRANCH_NAME`);
 }
 
+const labelScopeMain = process.env.LABEL_SCOPE_MAIN ?? "master-status"
+const labelScopeStaging = process.env.LABEL_SCOPE_STAGING ?? "staging-status"
+
+const labelValuePassed = process.env.LABEL_VALUE_PASSED ?? "passed"
+const labelValueFailed = process.env.LABEL_VALUE_FAILED ?? "failed"
+const labelValueSkipped = process.env.LABEL_VALUE_SKIPPED ?? "skipped"
+
 /*
  * CI_DEFAULT_BRANCH - The name of the project’s default branch.
  * CI_COMMIT_BRANCH - The commit branch name. Available in branch pipelines, including pipelines for the default branch. Not available in merge request pipelines or tag pipelines.
@@ -34,34 +41,36 @@ function arrayToString(arr: number[]) {
     return JSON.stringify(arr);
 }
 
-export const getAllLabels = () => {
-    const labelScopeMain = process.env.LABEL_SCOPE_MAIN ?? "master-status"
-    const labelScopeStaging = process.env.LABEL_SCOPE_STAGING ?? "staging-status"
-
-    const labelValuePassed = process.env.LABEL_VALUE_PASSED ?? "passed"
-    const labelValueFailed = process.env.LABEL_VALUE_FAILED ?? "failed"
-    const labelValueSkipped = process.env.LABEL_VALUE_SKIPPED ?? "skipped"
-
-    // TODO: cache
+export const getAllLabels_Main = () => {
     return new Map([
-        [arrayToString([1, 0, 1, 0, 0]), `${labelScopeMain}:${labelValuePassed}`],
-        [arrayToString([1, 0, 0, 1, 0]), `${labelScopeMain}:${labelValueFailed}`],
-        [arrayToString([1, 0, 0, 0, 1]), `${labelScopeMain}:${labelValueSkipped}`],
-        [arrayToString([0, 1, 1, 0, 0]), `${labelScopeStaging}:${labelValuePassed}`],
-        [arrayToString([0, 1, 0, 1, 0]), `${labelScopeStaging}:${labelValueFailed}`],
-        [arrayToString([0, 1, 0, 0, 1]), `${labelScopeStaging}:${labelValueSkipped}`],
+        [arrayToString([1, 1, 0, 0]), `${labelScopeMain}:${labelValuePassed}`],
+        [arrayToString([1, 0, 1, 0]), `${labelScopeMain}:${labelValueFailed}`],
+        [arrayToString([1, 0, 0, 1]), `${labelScopeMain}:${labelValueSkipped}`],
     ])
+}
+
+export const getAllLabels_Staging = () => {
+    return new Map([
+        [arrayToString([0, 1, 0, 0]), `${labelScopeStaging}:${labelValuePassed}`],
+        [arrayToString([0, 0, 1, 0]), `${labelScopeStaging}:${labelValueFailed}`],
+        [arrayToString([0, 0, 0, 1]), `${labelScopeStaging}:${labelValueSkipped}`],
+    ])
+}
+
+export const getAllLabels = () => {
+    return new Map([...getAllLabels_Main(), ...getAllLabels_Staging()])
 }
 
 export const getLabel = (key: number[]) => {
     return getAllLabels().get(arrayToString(key));
 }
 
-function getAllLabelsButThis(key: number[]) {
+export function getAllLabelsButThisSameType(key: number[]) {
     const result = [];
     const keyString = JSON.stringify(key);
+    const labelsSameType = key[0] === 1 ? getAllLabels_Main() : getAllLabels_Staging();
 
-    for (const [k, v] of getAllLabels()) {
+    for (const [k, v] of labelsSameType) {
         if (k !== keyString) {
             result.push(v);
         }
@@ -94,13 +103,13 @@ export const updateIssue = async (proj_id: number | string, issue_id_str: string
             return
         }
 
-        const key = [isOnMain ? 1 : 0, isOnMain ? 0 : 1, isPassed ? 1 : 0, isFailed ? 1 : 0, isSkipped ? 1 : 0]
+        const key = [isOnMain ? 1 : 0, isPassed ? 1 : 0, isFailed ? 1 : 0, isSkipped ? 1 : 0]
         const label2Add = getLabel(key)
         if (label2Add === undefined) {
             console.error("@@ INTERNAL ERROR - label2Add not found.");
             return
         }
-        const removeLabels = getAllLabelsButThis(key)
+        const removeLabels = getAllLabelsButThisSameType(key)
 
         console.log(`label2Add ${label2Add} - removeLabels ${removeLabels.join(",")}`);
 

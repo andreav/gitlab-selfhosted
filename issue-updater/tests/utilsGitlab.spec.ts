@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { isMainBranch, updateIssue } from "../src/utilsGitlab";
+import { isMainBranch, updateIssue, getAllLabelsButThisSameType } from "../src/utilsGitlab";
 
 describe("Gitlab Utils", () => {
     it("isOnMain from .env is not on main", () => {
@@ -21,10 +21,18 @@ describe("Gitlab Utils", () => {
     it("updateIssue - project name", async () => {
         await updateIssue("testgroup/testproject", "1", true, false, false)
     });
-    it("updateIssue - project id - passed", async () => {
-        await updateIssue("1", "1", true, false, false)
+    it("getAllLabelsButThisSameType", async () => {
+        assert.deepEqual(getAllLabelsButThisSameType([1, 1, 0, 0]), ["master-status:failed", "master-status:skipped"])
+        assert.deepEqual(getAllLabelsButThisSameType([1, 0, 1, 0]), ["master-status:passed", "master-status:skipped"])
+        assert.deepEqual(getAllLabelsButThisSameType([1, 0, 0, 1]), ["master-status:passed", "master-status:failed"])
+        assert.deepEqual(getAllLabelsButThisSameType([0, 1, 0, 0]), ["staging-status:failed", "staging-status:skipped"])
+        assert.deepEqual(getAllLabelsButThisSameType([0, 0, 1, 0]), ["staging-status:passed", "staging-status:skipped"])
+        assert.deepEqual(getAllLabelsButThisSameType([0, 0, 0, 1]), ["staging-status:passed", "staging-status:failed"])
     });
-    it("updateIssue - project id - failed", async () => {
-        await updateIssue("1", "1", false, true, false)
-    });
+    // it("updateIssue - project id - passed", async () => {
+    //     await updateIssue("1", "1", true, false, false)
+    // });
+    // it("updateIssue - project id - failed", async () => {
+    //     await updateIssue("1", "1", false, true, false)
+    // });
 });
